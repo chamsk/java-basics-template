@@ -1,5 +1,9 @@
 package com.epam.izh.rd.online.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class SimpleMathService implements MathService {
 
     /**
@@ -13,7 +17,7 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int compare(int value1, int value2) {
-        return -2;
+        return value1>value2?1:((value1==value2)?0:-1);
     }
 
     /**
@@ -22,7 +26,12 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int maxFrom(int value1, int value2) {
-        return -1;
+        int result = 0;
+        if (value1==value2){
+            throw new ArithmeticException("Вы ввели одинаковые числа");
+        }
+        result = value1>value2?value1:value2;
+        return result;
     }
 
     /**
@@ -31,7 +40,7 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int maxFrom(int[] values) {
-        return -1;
+        return Arrays.stream(values).boxed().max(Integer::compare).get();
     }
 
     /**
@@ -40,7 +49,7 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int sum(int[] values) {
-        return -1;
+        return Arrays.stream(values).sum();
     }
 
     /**
@@ -49,7 +58,7 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int[] getEvenDigits(int[] values) {
-        return new int[]{};
+        return Arrays.stream(values).filter(x -> (x % 2)==0).boxed().mapToInt(o -> (int)o).toArray();
     }
 
     /**
@@ -59,7 +68,14 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public long calcFactorial(int initialVal) {
-        return -1L;
+        if(initialVal < 0){
+            throw new ArithmeticException("Отрицательное число недопустимо");
+        }
+        long result = 1L;
+        for(int i=initialVal; i>0; i--){
+            result*=i;
+        }
+        return result;
     }
 
     /**
@@ -74,7 +90,17 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public long calcFibonacci(int number) {
-        return -1L;
+        if(number < 0){
+            throw new ArithmeticException("Отрицательное число недопустимо");
+        }
+        List<Long> list = new ArrayList<>();
+        list.add(0l);
+        list.add(1l);
+        for (int i=2; i<=number; i++){
+            int temp = list.size();
+            list.add(list.get(temp-2)+list.get(temp-1));
+        }
+        return list.get(number);
     }
 
     /**
@@ -83,7 +109,16 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int[] sort(int[] values) {
-        return new int[]{};
+        for (int i=0; i<values.length;i++){
+            for(int j=0;j<values.length;j++){
+                if(values[i]<values[j]){
+                    int temp = values[i];
+                    values[i] = values[j];
+                    values[j] = temp;
+                }
+            }
+        }
+        return values;
     }
 
     /**
@@ -94,7 +129,19 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public boolean isPrimary(int number) {
-        return false;
+        if(number<2){
+            return false;
+        }
+        if (number==2||number==3){
+            return true;
+        }
+        if(number % 2 == 0){
+            return false;
+        }
+        if(number % 3 == 0){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -104,6 +151,12 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int[] reverseArray(int[] values) {
-        return new int[]{};
+        int[] result = new int[values.length];
+        int size = values.length;
+        for (int i=0;i<values.length;i++){
+            size--;
+            result[i] = values[size];
+        }
+        return result;
     }
 }
